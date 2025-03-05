@@ -12,18 +12,18 @@ export const metadata: Metadata = {
 }
 
 interface ProductsPageProps {
-  searchParams: {
+  searchParams: Promise<{
     q?: string
     category?: string
     sort?: string
-  }
+  }>
 }
 
 export default async function ProductsPage({
   searchParams,
 }: ProductsPageProps) {
   // Create a local copy of the search params to avoid modifying the original
-  const params = { ...searchParams }
+  const params = await searchParams
   const searchQuery = params.q || ''
   const category = params.category || ''
   const sortBy = params.sort || null

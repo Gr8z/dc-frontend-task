@@ -7,16 +7,15 @@ import { Badge } from '@/components/ui/badge'
 import { Metadata } from 'next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
-interface ProductPageProps {
-  params: {
-    id: string
-  }
-}
+type Params = Promise<{ id: string }>
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 
 // Generate metadata for the product page
-export async function generateMetadata({
-  params,
-}: ProductPageProps): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Params
+  searchParams: SearchParams
+}): Promise<Metadata> {
+  const params = await props.params
   const id = parseInt(params.id, 10)
 
   if (isNaN(id)) {
@@ -58,7 +57,11 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage(props: {
+  params: Params
+  searchParams: SearchParams
+}) {
+  const params = await props.params
   const id = parseInt(params.id, 10)
 
   if (isNaN(id)) {

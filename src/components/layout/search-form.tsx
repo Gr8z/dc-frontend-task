@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-react'
 
@@ -13,6 +13,11 @@ export function SearchForm({ defaultValue }: SearchFormProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [searchQuery, setSearchQuery] = useState(defaultValue)
+
+  // Update searchQuery if defaultValue changes
+  useEffect(() => {
+    setSearchQuery(defaultValue)
+  }, [defaultValue])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

@@ -2,13 +2,26 @@
 
 import Link from 'next/link'
 import { ShoppingBag } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
 import { SearchForm } from './search-form'
+import { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 
-export function ClientNavbar() {
+// Loading fallback for search form
+function SearchFormSkeleton() {
+  return (
+    <div className='w-[250px] sm:w-[350px] h-9 bg-muted/20 rounded-md animate-pulse' />
+  )
+}
+
+// Separate component that uses useSearchParams
+function NavbarSearch() {
   const searchParams = useSearchParams()
   const searchQuery = searchParams.get('q') || ''
 
+  return <SearchForm defaultValue={searchQuery} />
+}
+
+export function ClientNavbar() {
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 flex h-16 items-center justify-between'>
@@ -27,7 +40,9 @@ export function ClientNavbar() {
           </nav>
         </div>
         <div className='flex items-center'>
-          <SearchForm defaultValue={searchQuery} />
+          <Suspense fallback={<SearchFormSkeleton />}>
+            <NavbarSearch />
+          </Suspense>
         </div>
       </div>
     </header>
