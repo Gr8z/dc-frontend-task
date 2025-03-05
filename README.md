@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# E-Commerce Product Search Application
+
+This is a multi-page web application that allows users to search for e-commerce products and view detailed information about them. The application is built with Next.js, TypeScript, Tailwind CSS, and Shadcn UI.
+
+## Features
+
+- **Search Functionality**: Search for products using the search bar in the navbar
+- **Product Listing**: View a list of products with basic information
+- **Product Details**: View detailed information about a product
+- **Filtering and Sorting**: Filter products by category and sort by price or rating
+- **Responsive Design**: Works on desktop and mobile devices
+
+## Technologies Used
+
+- **Next.js 15**: For server-side rendering, static site generation, and routing
+- **TypeScript**: For type safety and better developer experience
+- **Tailwind CSS**: For styling
+- **shadcn**: For UI components
+- **Server Actions**: For form handling and data mutations
+- **DummyJSON API**: For product data
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18.17 or later
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/Gr8z/dc-frontend-task.git
+cd dc-frontend-task
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/app`: Next.js app router pages
+- `src/components`: React components
+  - `layout`: Layout components like Navbar and Footer
+  - `products`: Product-related components
+  - `ui`: UI components from shadcn/ui
+- `src/lib`: Utility functions and hooks
+  - `actions`: Server actions for form handling
+  - `api`: API service for product data
 
-## Learn More
+## Architectural Decisions
 
-To learn more about Next.js, take a look at the following resources:
+### Server Components vs. Client Components
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Server Components**: Used for data fetching and initial rendering to improve performance and SEO
+- **Client Components**: Used for interactive elements like search and cart functionality
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### State Management
 
-## Deploy on Vercel
+- **Server Actions**: Used for form handling and data mutations
+- **URL Parameters**: Used for storing filter and sort state in the URL
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Data Fetching
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Server Components**: Used for data fetching directly from the API
+- **Server Actions**: Used for form submissions and data mutations
+
+### Static vs. Dynamic Rendering
+
+- **Static Generation**: Used for the first 10 product detail pages to improve performance
+- **Dynamic Rendering**: Used for other product detail pages and search results
+
+## Future Improvements
+
+- Add authentication and user accounts
+- Implement a real checkout process
+- Add product reviews and ratings
+- Implement pagination for product listings
+- Add more filtering options (price range, ratings, etc.)
+- Add product recommendations
+- Implement a wishlist feature
+- Add more comprehensive testing
