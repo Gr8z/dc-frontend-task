@@ -90,23 +90,28 @@ export async function getProducts(
 ): Promise<Product[]> {
   const { limit = 20, skip = 0, category = '', sortBy = null } = options
 
+  let url = `${API_BASE_URL}/products`
+  let products: Product[] = []
+
+  // If category is specified, use the category-specific endpoint
+  if (category) {
+    url = `${API_BASE_URL}/products/category/${encodeURIComponent(category)}`
+  } else {
+    // Otherwise, use the main products endpoint with limit and skip
+    url = `${API_BASE_URL}/products?limit=${limit}&skip=${skip}`
+  }
+
   // Fetch products with Next.js cache
-  const response = await fetch(
-    `${API_BASE_URL}/products?limit=${limit}&skip=${skip}`,
-    { next: { revalidate: 3600 } } // Cache for 1 hour
-  )
+  const response = await fetch(url, {
+    next: { revalidate: 3600 }, // Cache for 1 hour
+  })
 
   if (!response.ok) {
     throw new Error(`Failed to fetch products: ${response.statusText}`)
   }
 
   const data: ProductsResponse = await response.json()
-  let products = data.products.map(validateProductImages)
-
-  // Filter by category if specified
-  if (category) {
-    products = products.filter((product) => product.category === category)
-  }
+  products = data.products.map(validateProductImages)
 
   // Sort products if specified
   if (sortBy) {
@@ -139,6 +144,7 @@ export async function searchProducts(
 ): Promise<Product[]> {
   const { category = '', sortBy = null } = options
 
+  // First, search for products matching the query
   const response = await fetch(
     `${API_BASE_URL}/products/search?q=${encodeURIComponent(query)}`,
     { next: { revalidate: 60 } } // Cache for 1 minute (shorter for search results)
@@ -151,9 +157,25 @@ export async function searchProducts(
   const data: ProductsResponse = await response.json()
   let products = data.products.map(validateProductImages)
 
-  // Filter by category if specified
+  // If category is specified, filter the search results
   if (category) {
-    products = products.filter((product) => product.category === category)
+    // Get all products in the category
+    const categoryResponse = await fetch(
+      `${API_BASE_URL}/products/category/${encodeURIComponent(category)}`,
+      { next: { revalidate: 3600 } } // Cache for 1 hour
+    )
+
+    if (!categoryResponse.ok) {
+      throw new Error(
+        `Failed to fetch category products: ${categoryResponse.statusText}`
+      )
+    }
+
+    const categoryData: ProductsResponse = await categoryResponse.json()
+    const categoryProductIds = new Set(categoryData.products.map((p) => p.id))
+
+    // Filter search results to only include products in the specified category
+    products = products.filter((product) => categoryProductIds.has(product.id))
   }
 
   // Sort products if specified
