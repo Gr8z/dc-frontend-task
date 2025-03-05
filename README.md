@@ -2,6 +2,12 @@
 
 This is a multi-page web application that allows users to search for e-commerce products and view detailed information about them. The application is built with Next.js, TypeScript, Tailwind CSS, and Shadcn UI.
 
+## Live Demo
+
+Check out the live demo of the application deployed on Vercel:
+
+🔗 [View Demo](https://dc-frontend-task.vercel.app/)
+
 ## Features
 
 - **Search Functionality**: Search for products using the search bar in the navbar
